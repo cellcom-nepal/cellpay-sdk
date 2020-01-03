@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        >
+
+        <TextView
+            android:id="@+id/frag_conf_title_tv"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp20"
+            android:textColor="@color/colorOrange"
+            android:textSize="@dimen/sp22"
+            android:text="@string/confirm_transfer"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/please_enter_your_pin"
+            android:id="@+id/confirmation_text"
+            android:gravity="center"
+            android:textColor="@color/cellpayPrimaryDark"
+            android:layout_margin="@dimen/dp20" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edt_to"
+                android:inputType="numberDecimal"
+                android:hint="@string/payment_to"
+                android:focusable="false"
+                android:enabled="true"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edt_Amount"
+                android:inputType="numberDecimal"
+                android:hint="@string/total_amount"
+                android:focusable="false"
+                android:enabled="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edt_otp"
+                android:inputType="numberDecimal"
+                android:hint="@string/otp"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleTint="@color/cellpayAccentAlt"
+            app:passwordToggleEnabled="true"
+            android:paddingLeft="@dimen/dp10"
+            android:paddingRight="@dimen/dp10">
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/edtPin"
+                android:inputType="numberPassword"
+                android:maxLength="@integer/pin_max"
+                android:hint="@string/enter_6_digit_pin"
+                 />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp180"
+            android:text="@string/confirm"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp30"
+            android:id="@+id/btnConfirm"
+            style="@style/btnStyle"
+            android:layout_marginBottom="30dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>
