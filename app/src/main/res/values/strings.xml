@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">cp_app</string>
+    <string name="title_activity_success">SuccessActivity</string>
+</resources>

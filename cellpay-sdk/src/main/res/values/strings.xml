@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">cellpay-sdk</string>
+    <string name="pay">PAY</string>
+    <string name="empty"> </string>
+
+    <string name="next">Next</string>
+    <string name="merchant_pay">Merchant Transaction Details</string>
+    <string name="log_in">Log In</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="enter_6_digit_pin">Enter 6 Digit PIN</string>
+    <string name="select_payment_option">Select Bank to Debit</string>
+    <string name="hint_invoice_number">Invoice Number</string>
+    <string name="hint_amount">Total Amount</string>
+    <string name="hint_description">Description</string>
+    <string name="confirm_transfer">Confirm Payment</string>
+    <string name="total_amount">Total Amount</string>
+    <string name="otp">Enter OTP</string>
+    <string name="payment_to">Payment To</string>
+    <string name="confirm">Confirm</string>
+    <string name="please_enter_your_otp_pin">Please enter your OTP and PIN to confirm the transaction.</string>
+    <string name="please_enter_your_pin">Please enter your PIN to confirm the transaction.</string>
+
+    <string name="transaction_successful">Your transaction is successful.</string>
+</resources>

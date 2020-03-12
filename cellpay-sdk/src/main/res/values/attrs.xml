@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="cellpay">
+        <attr name="text" format="string" />
+        <attr name="button_style" format="enum">
+            <enum name="eBanking_dark" value="0" />
+            <enum name="eBanking_light" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="TextInputLayout">
+        <attr name="mainHintTextSize" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="ExpandableLayout">
+        <attr name="canExpand" format="boolean" />
+    </declare-styleable>
+</resources>
