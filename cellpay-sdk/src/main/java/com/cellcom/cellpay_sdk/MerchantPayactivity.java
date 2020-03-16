@@ -208,7 +208,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error :(" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error has Occurred" , Toast.LENGTH_SHORT).show();
             }
         });
     }
