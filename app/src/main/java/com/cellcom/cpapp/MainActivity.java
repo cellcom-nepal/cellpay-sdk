@@ -1,20 +1,20 @@
 package com.cellcom.cpapp;
 
-        import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.util.Log;
-        import android.view.View;
-        import android.widget.Toast;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 
-        import com.cellcom.cellpay_sdk.api.Config;
-        import com.cellcom.cellpay_sdk.api.OnCheckOutListener;
-        import com.cellcom.cellpay_sdk.helper.CellpayCheckOut;
-        import com.cellcom.cellpay_sdk.widget.CellpayButton;
+import com.cellcom.cellpay_sdk.api.Config;
+import com.cellcom.cellpay_sdk.api.OnCheckOutListener;
+import com.cellcom.cellpay_sdk.helper.CellpayCheckOut;
+import com.cellcom.cellpay_sdk.widget.CellpayButton;
 
-        import java.util.HashMap;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onError(String action, String message) {
                 Log.i(action, message);
+
+                String errorMessage = message;
+                Intent intent = new Intent(MainActivity.this, SuccessActivity.class);
+                intent.putExtra("On_Failure", errorMessage);
+                startActivity(intent);
             }
         });
 

@@ -26,9 +26,9 @@ public class RetrofitAPIClient {
         }
         if(retrofit == null){} {
             OkHttpClient.Builder okhttpClientBuilder = new OkHttpClient.Builder();
-            okhttpClientBuilder.connectTimeout(300, TimeUnit.SECONDS);
-            okhttpClientBuilder.readTimeout(300, TimeUnit.SECONDS);
-            okhttpClientBuilder.writeTimeout(300, TimeUnit.SECONDS);
+            okhttpClientBuilder.connectTimeout(180, TimeUnit.SECONDS);
+            okhttpClientBuilder.readTimeout(180, TimeUnit.SECONDS);
+            okhttpClientBuilder.writeTimeout(180, TimeUnit.SECONDS);
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 

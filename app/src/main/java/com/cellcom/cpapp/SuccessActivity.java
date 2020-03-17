@@ -21,8 +21,11 @@ public class SuccessActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TextView textView = findViewById(R.id.textView);
-        String responseData = getIntent().getStringExtra("refID")+ " - " + getIntent().getStringExtra("amount") + " - " + getIntent().getStringExtra("invoice") + " - " + getIntent().getStringExtra("status");
-                textView.setText(responseData);
+        String responseData = getIntent().getStringExtra("refID") + " - " + getIntent().getStringExtra("amount") + " - " + getIntent().getStringExtra("invoice") + " - " + getIntent().getStringExtra("status");
+        textView.setText(responseData);
+
+        String failureResponse = "Error Message: " + getIntent().getStringExtra("On_Failure");
+        textView.setText(failureResponse);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

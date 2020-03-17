@@ -34,13 +34,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MerchantPayactivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener{
+public class MerchantPayactivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener {
 
-    private TextInputEditText amount, invoice_number, description, payment_to, total_amount, otp,pin;
+    private TextInputEditText amount, invoice_number, description, payment_to, total_amount, otp, pin;
     Button next;
     CellPayClient client = RetrofitAPIClient.getRetrofitClinet(this).create(CellPayClient.class);
     private LabelledSpinner banks;
@@ -78,7 +79,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         description = findViewById(R.id.etDescription);
         description.setText(config.getDescription());
         banks = findViewById(R.id.spinner);
-        next=findViewById(R.id.act_p2p_next_btn);
+        next = findViewById(R.id.act_p2p_next_btn);
 
         //Setting text that were given by merchants
         amount.setText(NumberUtil.convertToRupees(config.getAmount()) + " NPR");
@@ -97,7 +98,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                 // Setting body for MemberPayment
 
                 memberPayment.setTransferTypeId("50");
-                memberPayment.setAmount(""+NumberUtil.convertToRupees(config.getAmount()));
+                memberPayment.setAmount("" + NumberUtil.convertToRupees(config.getAmount()));
                 memberPayment.setToMemberPrincipal(config.getMerchantId());
                 memberPayment.setDescription(config.getMerchantId());
                 memberPayment.setCurrencyId("1");
@@ -120,7 +121,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                 call.enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                        if(response.isSuccessful()){
+                        if (response.isSuccessful()) {
 
                             SessionStore.setDoPaymentResult(response.body().payload.doPaymentResult);
                             progressDialog.dismiss();
@@ -165,16 +166,16 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
     }
 
-    public void getBankList(){
+    public void getBankList() {
 
         List<String> banklst = new ArrayList<>();
         Call<ApiResponse> call = client.getMemberAccount(SessionStore.getSessionId());
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     SessionStore.setMemberNames(response.body().payload.mMemberNames);
-                    for(MemberNames mName : response.body().payload.mMemberNames){
+                    for (MemberNames mName : response.body().payload.mMemberNames) {
 
                         banklst.add(mName.getmMemberName());
                         Log.d("meTAG", "onResponse: " + mName.getmMemberName());
@@ -186,6 +187,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                             try {
                                 ApiResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MerchantPayactivity.this);
+
                                 builder.setMessage(errorResponse._iterateErrorMessage())
                                         .setTitle("Merchant Pay")
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -208,12 +210,13 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Error has Occurred" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error has Occurred", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
 
-    public void showSuccessDialog(View view, HashMap<String, Object> data){
+    public void showSuccessDialog(View view, HashMap<String, Object> data) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.transaction_successful)
                 .setTitle("Pay Merchant")
@@ -228,7 +231,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         dialog.show();
     }
 
-    public void showAlertDialogButtonClicked(View view){
+    public void showAlertDialogButtonClicked(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View customLayout = getLayoutInflater().inflate(R.layout.dialog_confirm_pin, null);
         builder.setView(customLayout);
@@ -236,8 +239,8 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         dialog.show();
 
         TextView confirmationMessage = customLayout.findViewById(R.id.confirmation_text);
-        payment_to= customLayout.findViewById(R.id.edt_to);
-        total_amount= customLayout.findViewById(R.id.edt_Amount);
+        payment_to = customLayout.findViewById(R.id.edt_to);
+        total_amount = customLayout.findViewById(R.id.edt_Amount);
         otp = customLayout.findViewById(R.id.edt_otp);
         pin = customLayout.findViewById(R.id.edtPin);
         otp.setVisibility(view.GONE);
@@ -247,7 +250,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         total_amount.setText(SessionStore.getDoPaymentResult().consolidatedFormatterAmount);
 
 
-        if(SessionStore.getDoPaymentResult().isOtpEnable){
+        if (SessionStore.getDoPaymentResult().isOtpEnable) {
             otp.setVisibility(view.VISIBLE);
             confirmationMessage.setText(R.string.please_enter_your_otp_pin);
         }
@@ -262,7 +265,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                 progressDialog.show();
 
                 memberPayment.setTransactionPin(pin.getText().toString());
-                if(SessionStore.getDoPaymentResult().isOtpEnable){
+                if (SessionStore.getDoPaymentResult().isOtpEnable) {
                     memberPayment.setOtp(otp.getText().toString());
                 }
 
@@ -271,25 +274,45 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                 call.enqueue(new Callback<ApiResponse>() {
                     @Override
                     public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                        if(response.isSuccessful()){
-                            Log.d("mabeTAG", "onResponse: "+response.body().payload.confirmPaymentResult.getId());
-                            Toast.makeText(getApplicationContext(), "Transaction Id :" +response.body().payload.confirmPaymentResult.getId() , Toast.LENGTH_LONG).show();
+                        if (response.isSuccessful()) {
+//                            Log.d("mabeTAG", "onResponse: " + response.body().payload.confirmPaymentResult.getId());
+//                            Toast.makeText(getApplicationContext(), "Transaction Id :" + response.body().payload.confirmPaymentResult.getId(), Toast.LENGTH_LONG).show();
 
                             HashMap<String, Object> data = new HashMap<>();
                             data.put("cellpay_transaction_status", "SUCCESS");
                             data.put("merchant_invoice_number", config.getInvoiceNumber());
-                            data.put("merchant_amount", ""+NumberUtil.convertToRupees(config.getAmount()));
+                            data.put("merchant_amount", "" + NumberUtil.convertToRupees(config.getAmount()));
                             data.put("cellpay_ref_id", response.body().payload.confirmPaymentResult.getId());
 
                             progressDialog.dismiss();
                             dialog.dismiss();
 
-                            showSuccessDialog(view,data);
-                        }else {
+                            showSuccessDialog(view, data);
+                        } else {
 
                             switch (response.code()) {
-                                case 400:
-                                    try {
+//                                case 400:
+//                                    try {
+//                                        ApiResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
+//                                        AlertDialog.Builder builder = new AlertDialog.Builder(MerchantPayactivity.this);
+//                                        builder.setMessage(errorResponse._iterateErrorMessage())
+//                                                .setTitle("Merchant Pay")
+//                                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                                                    @Override
+//                                                    public void onClick(DialogInterface dialog, int which) {
+//                                                        OnCheckOutListener onCheckOutListener = config.getOnCheckOutListener();
+//                                                        onCheckOutListener.onError("api_response", errorResponse._iterateErrorMessage());
+//                                                    }
+//                                                });
+//                                        AlertDialog dialog = builder.create();
+//                                        dialog.show();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    progressDialog.dismiss();
+//                                    break;
+                                default:
+                                    try{
                                         ApiResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
                                         AlertDialog.Builder builder = new AlertDialog.Builder(MerchantPayactivity.this);
                                         builder.setMessage(errorResponse._iterateErrorMessage())
@@ -297,25 +320,29 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
+                                                        HashMap<String,String> failureData=new HashMap<>();
+                                                        failureData.put("On_Failure ",errorResponse._iterateErrorMessage());
                                                         OnCheckOutListener onCheckOutListener = config.getOnCheckOutListener();
-                                                        onCheckOutListener.onError("api_response",errorResponse._iterateErrorMessage());
+                                                        onCheckOutListener.onError("On_Failure", errorResponse._iterateErrorMessage());
                                                     }
                                                 });
                                         AlertDialog dialog = builder.create();
                                         dialog.show();
-                                    } catch (IOException e) {
+                                    }catch (IOException e){
                                         e.printStackTrace();
                                     }
                                     progressDialog.dismiss();
                                     break;
+
                             }
+
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse> call, Throwable t) {
                         Log.d("mabeTAG", "onFailure: " + t.getMessage());
-                        Toast.makeText(getApplicationContext(), "Error :(", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error has occurred", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                         progressDialog.dismiss();
                     }
@@ -336,9 +363,9 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         String selectedText = adapterView.getItemAtPosition(position).toString();
         if (labelledSpinner.getId() == R.id.spinner) {
 
-            for(MemberNames mnames: SessionStore.getMemberNames()){
-                if(mnames.getmMemberName().equalsIgnoreCase(selectedText)){
-                    Log.d("TAGs", "onItemChosen: "+ mnames.getmUserName() + "- "+mnames.getmAccountNo());
+            for (MemberNames mnames : SessionStore.getMemberNames()) {
+                if (mnames.getmMemberName().equalsIgnoreCase(selectedText)) {
+                    Log.d("TAGs", "onItemChosen: " + mnames.getmUserName() + "- " + mnames.getmAccountNo());
                     bankName = mnames.getmUserName();
                     accountNumber = mnames.getmAccountNo();
                 }
