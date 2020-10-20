@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         map.put("merchant_extra", "This is extra data");
         map.put("merchant_extra_2", "This is extra data 2");
 
-        Config config = new Config("cellpayTestKey", "9801977888", "11234", "SASTODEAL PAYMENT", 1000L, map, new OnCheckOutListener() {
+        Config config = new Config("cellpayTestKey", "9801977888", "11234", "MERCHANT PAYMENT", 1000L, map, new OnCheckOutListener() {
 
             @Override
             public void onSuccess(HashMap<String, Object> data) {
