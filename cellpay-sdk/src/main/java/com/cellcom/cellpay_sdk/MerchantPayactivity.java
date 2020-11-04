@@ -243,7 +243,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         total_amount = customLayout.findViewById(R.id.edt_Amount);
         otp = customLayout.findViewById(R.id.edt_otp);
         pin = customLayout.findViewById(R.id.edtPin);
-        otp.setVisibility(view.GONE);
+        otp.setVisibility(View.GONE);
 
         confirmationMessage.setText(R.string.please_enter_your_pin);
         payment_to.setText(SessionStore.getDoPaymentResult().to.name);

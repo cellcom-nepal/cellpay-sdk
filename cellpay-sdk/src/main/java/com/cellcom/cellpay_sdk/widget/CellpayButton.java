@@ -109,7 +109,7 @@ public class CellpayButton extends FrameLayout implements CellpayButtonInterface
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.cellpay, 0, 0);
         String buttonText = a.getString(R.styleable.cellpay_text);
-        buttonStyle = a.getInt(R.styleable.cellpay_button_style, -1);
+        buttonStyle = a.getInt(R.styleable.cellpay_btn_style, -1);
         a.recycle();
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -128,7 +128,7 @@ public class CellpayButton extends FrameLayout implements CellpayButtonInterface
 
     private class Pay implements PayContract.View {
         private PayContract.Presenter presenter;
-        private CellpayCheckOut khaltiCheckOut;
+        private CellpayCheckOut cellpayCheckOut;
 
         Pay() {
             presenter = new PayPresenter(this);
@@ -178,16 +178,16 @@ public class CellpayButton extends FrameLayout implements CellpayButtonInterface
 
         @Override
         public void openForm() {
-            khaltiCheckOut = new CellpayCheckOut(context, config);
-            khaltiCheckOut.show();
+            cellpayCheckOut = new CellpayCheckOut(context, config);
+            cellpayCheckOut.show();
         }
 
         @Override
         public void destroyCheckOut() {
-            if (EmptyUtil.isNull(khaltiCheckOut)) {
+            if (EmptyUtil.isNull(cellpayCheckOut)) {
                 throw new IllegalArgumentException("CheckOut cannot be destroyed before it is shown.");
             }
-            khaltiCheckOut.destroy();
+            cellpayCheckOut.destroy();
         }
 
         PayContract.Presenter getPresenter() {

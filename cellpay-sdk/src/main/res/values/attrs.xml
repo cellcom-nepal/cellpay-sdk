@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="cellpay">
         <attr name="text" format="string" />
-        <attr name="button_style" format="enum">
+        <attr name="btn_style" format="enum">
             <enum name="eBanking_dark" value="0" />
             <enum name="eBanking_light" value="1" />
         </attr>
