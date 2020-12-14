@@ -22,7 +22,7 @@ public class DoPaymentResult {
     public boolean isOtpEnable;
 
     @SerializedName("consolidatedAmount")
-    public long consolidatedAmount;
+    public double consolidatedAmount;
 
     @SerializedName("consolidatedFormatterAmount")
     public String consolidatedFormatterAmount;
@@ -67,7 +67,7 @@ public class DoPaymentResult {
         isOtpEnable = otpEnable;
     }
 
-    public long getConsolidatedAmount() {
+    public double getConsolidatedAmount() {
         return consolidatedAmount;
     }
 
