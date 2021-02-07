@@ -22,7 +22,6 @@ import com.cellcom.cellpay_sdk.retrofit.NoConnectivityException;
 import com.cellcom.cellpay_sdk.retrofit.RetrofitAPIClient;
 import com.cellcom.cellpay_sdk.utils.SessionStore;
 import com.cellcom.cellpay_sdk.validation.SaripaarValidation;
-import com.mobsandgeeks.saripaar.ValidationContext;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Password;
@@ -63,7 +62,7 @@ public class CheckOutActivity extends SaripaarValidation {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.payment_activity);
+        setContentView(R.layout.cellpay_payment_activity);
         progressDialog = new ProgressDialog(this);
         signIn();
     }
