@@ -21,4 +21,7 @@
     <string name="please_enter_your_pin">Please enter your PIN to confirm the transaction.</string>
 
     <string name="transaction_successful">Your transaction is successful.</string>
+    <string name="wallet">Wallet</string>
+    <string name="account">Account</string>
+    <string name="wallet_balance">Wallet Balance</string>
 </resources>

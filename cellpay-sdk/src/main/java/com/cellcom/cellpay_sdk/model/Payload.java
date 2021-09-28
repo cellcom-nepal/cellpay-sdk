@@ -14,4 +14,12 @@ public class Payload {
 
     @SerializedName("ConfirmPaymentResult")
     public ConfirmPaymentResult confirmPaymentResult;
+
+    @SerializedName("AccountStatusVO")
+    public WalletBalance mWalletBalance;
+
+
+    @SerializedName("MemberAccountVOList")
+    public List<WalletIds> mWalletIds;
+
 }

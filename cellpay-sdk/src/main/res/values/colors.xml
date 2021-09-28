@@ -11,14 +11,17 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="defaultRipple">#54000000</color>
+    <color name="colorMenuColor">#979797</color>
 
     <color name="pink500">#e91e63</color>
 
     <color name="primaryText">#87000000</color>
     <color name="disabled">#38000000</color>
     <color name="secondaryText">#54000000</color>
+    <color name="colorGrey">#E5E5E5</color>
 
     <color name="carbonX_text_button_dark">#deffffff</color>
     <color name="carbonX_text_button_light">#de000000</color>
     <color name="colorOrange">#f0b61c</color>
+    <color name="selectColor">#253282</color>
 </resources>

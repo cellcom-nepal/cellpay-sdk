@@ -7,10 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cellcom.cellpay_sdk.model.WalletBalance;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.cellcom.cellpay_sdk.api.Config;
 import com.cellcom.cellpay_sdk.api.OnCheckOutListener;
@@ -28,6 +32,7 @@ import com.satsuware.usefulviews.LabelledSpinner;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,16 +46,26 @@ import java.util.List;
 
 public class MerchantPayactivity extends AppCompatActivity implements LabelledSpinner.OnItemChosenListener {
 
+    private static final String TAG = "MerchantPayactivity";
     private TextInputEditText amount, invoice_number, description, payment_to, total_amount, otp, pin;
+    private TextInputLayout otpLayout;
+    private LinearLayout walletBalance;
+    private TextView walletBalanceAmount;
     Button next;
     CellPayClient client = RetrofitAPIClient.getRetrofitClinet(this).create(CellPayClient.class);
+
+    private LinearLayout walletLayout, accountLayout;
     private LabelledSpinner banks;
     List<MemberNames> memberNames;
     MemberPayment memberPayment = new MemberPayment();
+    private ImageView ivAccount, ivWallet;
 
     private Config config;
 
     String bankName, accountNumber;
+    private String paymentType;
+    private final String ACCOUNT = "account";
+    private final String WALLET = "wallet";
 
     ProgressDialog progressDialog;
 
@@ -62,6 +77,9 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
         config = Store.getConfig();
 
+        paymentType = ACCOUNT;
+
+
         getBankList();
         progressDialog = new ProgressDialog(this);
 
@@ -71,11 +89,22 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        walletLayout = findViewById(R.id.act_top_wallet_lnr_lyt);
+        accountLayout = findViewById(R.id.act_top_account_lnr_lyt);
+
+
+        walletBalance = findViewById(R.id.et_wallet_balance_layout);
+
+
+        ivAccount = findViewById(R.id.act_top_account_iv);
+        ivWallet = findViewById(R.id.act_top_wallet_iv);
+
+
         //binding views to editText
         amount = findViewById(R.id.etAmount);
-        amount.setKeyListener(null);
+        walletBalanceAmount = findViewById(R.id.etWalletAmount);
+
         invoice_number = findViewById(R.id.etInvoiceNumber);
-        invoice_number.setKeyListener(null);
         description = findViewById(R.id.etDescription);
         description.setText(config.getDescription());
         banks = findViewById(R.id.spinner);
@@ -88,6 +117,32 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
         banks.setOnItemChosenListener(this);
 
+        walletLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e(TAG, "onClick: wallet");
+
+                paymentType = WALLET;
+                banks.setVisibility(View.GONE);
+                walletBalance.setVisibility(View.VISIBLE);
+                ivAccount.setColorFilter(ContextCompat.getColor(MerchantPayactivity.this, R.color.colorMenuColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                ivWallet.setColorFilter(ContextCompat.getColor(MerchantPayactivity.this, R.color.selectColor), android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+        });
+
+        accountLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                paymentType = ACCOUNT;
+                walletBalance.setVisibility(View.GONE);
+                banks.setVisibility(View.VISIBLE);
+                ivWallet.setColorFilter(ContextCompat.getColor(MerchantPayactivity.this, R.color.colorMenuColor), android.graphics.PorterDuff.Mode.SRC_IN);
+                ivAccount.setColorFilter(ContextCompat.getColor(MerchantPayactivity.this, R.color.selectColor), android.graphics.PorterDuff.Mode.SRC_IN);
+
+                Log.e(TAG, "onClick: account");
+
+            }
+        });
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,21 +152,26 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                 progressDialog.show();
                 // Setting body for MemberPayment
 
-                memberPayment.setTransferTypeId("50");
+                if (paymentType == ACCOUNT)
+                    memberPayment.setTransferTypeId("50");
+                if (paymentType == WALLET)
+                    memberPayment.setTransferTypeId("68");
                 memberPayment.setAmount("" + NumberUtil.convertToRupees(config.getAmount()));
                 memberPayment.setToMemberPrincipal(config.getMerchantId());
                 memberPayment.setDescription(config.getMerchantId());
                 memberPayment.setCurrencyId("1");
                 memberPayment.setWebRequest(true);
                 List<CustomValues> customValues = new ArrayList<>();
-                CustomValues cv1 = new CustomValues("PAYMENTMETHOD", "15", "Account");
-                CustomValues cv2 = new CustomValues("SELECTBANK", "35", bankName);
-                CustomValues cv3 = new CustomValues("ACCOUNTNUMBER", "14", accountNumber);
-                CustomValues cv4 = new CustomValues("INVOICENUMBER", "99", config.getInvoiceNumber());
-                customValues.add(cv1);
-                customValues.add(cv2);
-                customValues.add(cv3);
-                customValues.add(cv4);
+
+                if(paymentType == ACCOUNT){
+                    customValues.add( new CustomValues("PAYMENTMETHOD", "15", "Account"));
+                    customValues.add(new CustomValues("SELECTBANK", "35", bankName));
+                    customValues.add(new CustomValues("ACCOUNTNUMBER", "14", accountNumber));
+                }
+               if(paymentType == WALLET )
+                   customValues.add( new CustomValues("PAYMENTMETHOD", "15", "Mobile Wallet"));
+
+                customValues.add(new CustomValues("INVOICENUMBER", "99", config.getInvoiceNumber()));
                 memberPayment.setCustomValues(customValues);
                 memberPayment.setOtpEnable(false);
 
@@ -163,8 +223,113 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
             }
         });
 
+        getWalletId();
+
 
     }
+
+    private WalletBalance mWalletBalanceStatus;
+
+    private void getWalletId() {
+
+        Call<ApiResponse> call = client.getWalletId(SessionStore.getSessionId());
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+                if (response.isSuccessful()) {
+
+                    getWalletStatus(response.body().payload.mWalletIds.get(1).id);
+
+
+//                    walletBalanceAmount.setText(mWalletBalanceStatus.formattedBalance);
+
+
+                } else {
+
+                    switch (response.code()) {
+                        case 400:
+                            try {
+                                ApiResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MerchantPayactivity.this);
+                                builder.setMessage(errorResponse._iterateErrorMessage())
+                                        .setTitle("Merchant Pay")
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            progressDialog.dismiss();
+                            break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+//                progressDialog.dismiss();
+//                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getWalletStatus(String id) {
+
+        Call<ApiResponse> call = client.getWalletStatus(SessionStore.getSessionId(), id);
+
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+                if (response.isSuccessful()) {
+
+                    mWalletBalanceStatus = response.body().payload.mWalletBalance;
+                    walletBalanceAmount.setText("Wallet Balance: "+mWalletBalanceStatus.formattedBalance);
+
+
+                } else {
+
+                    switch (response.code()) {
+                        case 400:
+                            try {
+                                ApiResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MerchantPayactivity.this);
+                                builder.setMessage(errorResponse._iterateErrorMessage())
+                                        .setTitle("Merchant Pay")
+                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            progressDialog.dismiss();
+                            break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+//                progressDialog.dismiss();
+//                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     public void getBankList() {
 
@@ -179,6 +344,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
                         banklst.add(mName.getmMemberName());
                         Log.d("meTAG", "onResponse: " + mName.getmMemberName());
+
                     }
                     banks.setItemsArray(banklst);
                 } else {
@@ -242,8 +408,10 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
         payment_to = customLayout.findViewById(R.id.edt_to);
         total_amount = customLayout.findViewById(R.id.edt_Amount);
         otp = customLayout.findViewById(R.id.edt_otp);
+        otpLayout = customLayout.findViewById(R.id.edt_otp_layout);
         pin = customLayout.findViewById(R.id.edtPin);
         otp.setVisibility(View.GONE);
+        otpLayout.setVisibility(View.GONE);
 
         confirmationMessage.setText(R.string.please_enter_your_pin);
         payment_to.setText(SessionStore.getDoPaymentResult().to.name);
@@ -252,6 +420,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 
         if (SessionStore.getDoPaymentResult().isOtpEnable) {
             otp.setVisibility(view.VISIBLE);
+            otpLayout.setVisibility(view.VISIBLE);
             confirmationMessage.setText(R.string.please_enter_your_otp_pin);
         }
         Button confirm_button = customLayout.findViewById(R.id.btnConfirm);
@@ -312,7 +481,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
 //                                    progressDialog.dismiss();
 //                                    break;
                                 default:
-                                    try{
+                                    try {
                                         ApiResponse errorResponse = new Gson().fromJson(response.errorBody().string(), ApiResponse.class);
                                         AlertDialog.Builder builder = new AlertDialog.Builder(MerchantPayactivity.this);
                                         builder.setMessage(errorResponse._iterateErrorMessage())
@@ -320,15 +489,15 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
-                                                        HashMap<String,String> failureData=new HashMap<>();
-                                                        failureData.put("On_Failure ",errorResponse._iterateErrorMessage());
+                                                        HashMap<String, String> failureData = new HashMap<>();
+                                                        failureData.put("On_Failure ", errorResponse._iterateErrorMessage());
                                                         OnCheckOutListener onCheckOutListener = config.getOnCheckOutListener();
                                                         onCheckOutListener.onError("On_Failure", errorResponse._iterateErrorMessage());
                                                     }
                                                 });
                                         AlertDialog dialog = builder.create();
                                         dialog.show();
-                                    }catch (IOException e){
+                                    } catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                     progressDialog.dismiss();

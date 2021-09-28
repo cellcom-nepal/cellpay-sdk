@@ -24,19 +24,21 @@
         android:id="@+id/act_mpay_linelay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_below="@+id/toolbar"
         android:layout_marginTop="@dimen/dp20"
+        android:orientation="vertical"
         android:paddingStart="@dimen/dp20"
-        android:paddingEnd="@dimen/dp20"
-        android:layout_below="@+id/toolbar">
+        android:paddingEnd="@dimen/dp20">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etInvoiceNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:hint="@string/hint_invoice_number"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -44,10 +46,12 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:hint="@string/hint_amount"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -55,6 +59,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDescription"
                 android:layout_width="match_parent"
@@ -64,42 +69,128 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <RelativeLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-<!--            <TextView-->
-<!--                android:id="@+id/tv_select"-->
-<!--                android:textSize="@dimen/sp16"-->
-<!--                android:textColor="@color/cellpayAccent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_gravity="start"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="@dimen/dp15"-->
-<!--                android:text="@string/select_payment_option"/>-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/tv_select"-->
+            <!--                android:textSize="@dimen/sp16"-->
+            <!--                android:textColor="@color/cellpayAccent"-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_gravity="start"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="@dimen/dp15"-->
+            <!--                android:text="@string/select_payment_option"/>-->
 
 
             <com.satsuware.usefulviews.LabelledSpinner
                 android:id="@+id/spinner"
-                app:labelText="@string/select_payment_option"
-                app:widgetColor="@color/cellpayPrimary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
+                app:labelText="@string/select_payment_option"
+                app:widgetColor="@color/cellpayPrimary" />
 
         </RelativeLayout>
 
+
+
+        <LinearLayout
+            android:id="@+id/et_wallet_balance_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+
+
+            <TextView
+                android:id="@+id/etWalletAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/dp10"
+                android:gravity="center"
+                android:text="Wallet Balance: 0"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/paymentTypeLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/act_top_account_lnr_lyt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/act_top_account_iv"
+                    android:layout_width="@dimen/dp35"
+                    android:layout_height="@dimen/dp35"
+                    android:background="@drawable/stroke_grey"
+                    android:padding="@dimen/dp5"
+                    android:src="@drawable/ic_customer"
+                    app:tint="@color/selectColor" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:gravity="center"
+                    android:text="@string/account"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/act_top_wallet_lnr_lyt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp20"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/act_top_wallet_iv"
+                    android:layout_width="@dimen/dp35"
+                    android:layout_height="@dimen/dp35"
+                    android:background="@drawable/stroke_grey"
+                    android:padding="@dimen/dp5"
+                    android:src="@drawable/ic_wallet"
+                    app:tint="@color/colorMenuColor"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="@dimen/dp10"
+                    android:gravity="center"
+                    android:text="@string/wallet"
+                    android:textColor="@android:color/black" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/act_p2p_next_btn"
+            style="@style/btnStyle"
             android:layout_width="@dimen/dp180"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp30"
             android:layout_marginBottom="@dimen/dp40"
-            android:text="@string/next"
-            android:layout_gravity="center"
-            style="@style/btnStyle"/>
+            android:text="@string/next" />
     </LinearLayout>
+
+
 
 
 </RelativeLayout>

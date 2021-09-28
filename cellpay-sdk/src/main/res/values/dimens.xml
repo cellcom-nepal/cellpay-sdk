@@ -32,4 +32,6 @@
     <dimen name="carbonX_buttonWidth1">250dp</dimen>
     <dimen name="carbonX_buttonHeight">52dp</dimen>
     <dimen name="carbonX_textSizeButton">14sp</dimen>
+    <dimen name="dp35">35dp</dimen>
+    <dimen name="dp1">1dp</dimen>
 </resources>

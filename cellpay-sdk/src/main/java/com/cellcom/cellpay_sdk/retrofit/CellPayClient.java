@@ -10,6 +10,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface CellPayClient {
 
@@ -31,6 +32,17 @@ public interface CellPayClient {
     @Headers("Content-Type: application/json")
     @POST("payments/confirmMemberPayment")
     Call<ApiResponse> executeConfirmMemberPayment(@Header("Paynet-Session-Token") String token, @Body MemberPayment memberPayment);
+
+    @Headers("Content-Type: application/json")
+    @GET("accounts/{id}/status")
+    Call<ApiResponse> getWalletStatus(@Header("Paynet-Session-Token") String token, @Path("id") String id);
+
+
+
+
+    @Headers("Content-Type: application/json")
+    @GET("accounts")
+    Call<ApiResponse> getWalletId(@Header("Paynet-Session-Token") String token);
 
 
 //    public static final Retrofit retrofit = new Retrofit.Builder()
