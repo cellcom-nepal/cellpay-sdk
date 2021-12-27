@@ -126,6 +126,7 @@ public class CheckOutActivity extends SaripaarValidation {
                     Intent intent = new Intent(CheckOutActivity.this, MerchantPayactivity.class);
                     startActivity(intent);
                     progressDialog.dismiss();
+                    finish();
                     //Toast.makeText(getApplicationContext(), response.body().getSessionId(), Toast.LENGTH_SHORT).show();
                 } else {
 

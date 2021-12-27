@@ -225,6 +225,7 @@ public class MerchantPayactivity extends AppCompatActivity implements LabelledSp
                     public void onClick(DialogInterface dialog, int which) {
                         OnCheckOutListener onCheckOutListener = config.getOnCheckOutListener();
                         onCheckOutListener.onSuccess(data);
+                        finish();
                     }
                 });
         AlertDialog dialog = builder.create();
